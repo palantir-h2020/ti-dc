@@ -1,0 +1,27 @@
+FROM python:3.7.8-slim
+
+# Install required Python packages
+COPY requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
+
+# Create directory in home where nfcapd files and execution scripts will be saved
+WORKDIR /home/RegistryService
+
+# Copy required files
+COPY registry.py /home/RegistryService/
+COPY start_registry_service.sh /home/RegistryService/
+
+RUN chmod 777 start_registry_service.sh
+RUN chmod +x start_registry_service.sh
+
+# Set ENV variables
+# Port, where Python API for discovery will be running
+ENV DISCOVERY_PORT=5000
+# Time interval (in seconds) that registry service will 
+# check for availability of all registered services
+ENV PING_INTERVAL=60
+
+# Expose required ports
+EXPOSE ${DISCOVERY_PORT}
+
+CMD ["/bin/bash", "start_registry_service.sh"]

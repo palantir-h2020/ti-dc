@@ -1,0 +1,376 @@
+{
+  "csv_fields": [
+    {
+      "id": 0,
+      "name": "ts",
+      "description": "Start Time - first seen",
+      "type": "String"
+    },
+    {
+      "id": 1,
+      "name": "te",
+      "description": "End Time - last seen",
+      "type": "String"
+    },
+    {
+      "id": 2,
+      "name": "td",
+      "description": "Duration",
+      "type": "Double"
+    },
+    {
+      "id": 3,
+      "name": "sa",
+      "description": "Source Address",
+      "type": "String"
+    },
+    {
+      "id": 4,
+      "name": "da",
+      "description": "Destination Address",
+      "type": "String"
+    },
+    {
+      "id": 5,
+      "name": "sp",
+      "description": "Source Port",
+      "type": "Integer"
+    },
+    {
+      "id": 6,
+      "name": "dp",
+      "description": "Destination Port",
+      "type": "Integer"
+    },
+    {
+      "id": 7,
+      "name": "pr",
+      "description": "Protocol",
+      "type": "String"
+    },
+    {
+      "id": 8,
+      "name": "flg",
+      "description": "TCP Flags",
+      "type": "String"
+    },
+    {
+      "id": 9,
+      "name": "fwd",
+      "description": "Forwarding Status",
+      "type": "Integer"
+    },
+    {
+      "id": 10,
+      "name": "stos",
+      "description": "Source Tos",
+      "type": "Integer"
+    },
+    {
+      "id": 11,
+      "name": "ipkt",
+      "description": "Input Packets",
+      "type": "Integer"
+    },
+    {
+      "id": 12,
+      "name": "ibyt",
+      "description": "Input Bytes",
+      "type": "Double"
+    },
+    {
+      "id": 13,
+      "name": "opkt",
+      "description": "Output Packets",
+      "type": "Integer"
+    },
+    {
+      "id": 14,
+      "name": "obyt",
+      "description": "Output Bytes",
+      "type": "Double"
+    },
+    {
+      "id": 15,
+      "name": "in",
+      "description": "Input Interface num",
+      "type": "Integer"
+    },
+    {
+      "id": 16,
+      "name": "out",
+      "description": "Output Interface num",
+      "type": "Integer"
+    },
+    {
+      "id": 17,
+      "name": "sas",
+      "description": "Source AS",
+      "type": "Integer"
+    },
+    {
+      "id": 18,
+      "name": "das",
+      "description": "Destination AS",
+      "type": "Integer"
+    },
+    {
+      "id": 19,
+      "name": "smk",
+      "description": "Source mask",
+      "type": "Integer"
+    },
+    {
+      "id": 20,
+      "name": "dmk",
+      "description": "Destination mask",
+      "type": "Integer"
+    },
+    {
+      "id": 21,
+      "name": "dtos",
+      "description": "Destination Tos",
+      "type": "Integer"
+    },
+    {
+      "id": 22,
+      "name": "dir",
+      "description": "Direction: ingress, egress",
+      "type": "Integer"
+    },
+    {
+      "id": 23,
+      "name": "nh",
+      "description": "Next-hop IP Address",
+      "type": "String"
+    },
+    {
+      "id": 24,
+      "name": "nhb",
+      "description": "BGP Next-hop IP Address",
+      "type": "String"
+    },
+    {
+      "id": 25,
+      "name": "svln",
+      "description": "Src vlan label",
+      "type": "Integer"
+    },
+    {
+      "id": 26,
+      "name": "dvln",
+      "description": "Dst vlan label",
+      "type": "Integer"
+    },
+    {
+      "id": 27,
+      "name": "ismc",
+      "description": "Input Src Mac Addr",
+      "type": "String"
+    },
+    {
+      "id": 28,
+      "name": "odmc",
+      "description": "Output Dst Mac Addr",
+      "type": "String"
+    },
+    {
+      "id": 29,
+      "name": "idmc",
+      "description": "Input Dst Mac Addr",
+      "type": "String"
+    },
+    {
+      "id": 30,
+      "name": "osmc",
+      "description": "Output Src Mac Addr",
+      "type": "String"
+    },
+    {
+      "id": 31,
+      "name": "mpls1",
+      "description": "MPLS label 1",
+      "type": "String"
+    },
+    {
+      "id": 32,
+      "name": "mpls2",
+      "description": "MPLS label 2",
+      "type": "String"
+    },
+    {
+      "id": 33,
+      "name": "mpls3",
+      "description": "MPLS label 3",
+      "type": "String"
+    },
+    {
+      "id": 34,
+      "name": "mpls4",
+      "description": "MPLS label 4",
+      "type": "String"
+    },
+    {
+      "id": 35,
+      "name": "mpls5",
+      "description": "MPLS label 5",
+      "type": "String"
+    },
+    {
+      "id": 36,
+      "name": "mpls6",
+      "description": "MPLS label 6",
+      "type": "String"
+    },
+    {
+      "id": 37,
+      "name": "mpls7",
+      "description": "MPLS label 7",
+      "type": "String"
+    },
+    {
+      "id": 38,
+      "name": "mpls8",
+      "description": "MPLS label 8",
+      "type": "String"
+    },
+    {
+      "id": 39,
+      "name": "mpls9",
+      "description": "MPLS label 9",
+      "type": "String"
+    },
+    {
+      "id": 40,
+      "name": "mpls10",
+      "description": "MPLS label 10",
+      "type": "String"
+    },
+    {
+      "id": 41,
+      "name": "cl",
+      "description": "Client latency",
+      "type": "Double"
+    },
+    {
+      "id": 42,
+      "name": "sl",
+      "description": "Server latency",
+      "type": "Double"
+    },
+    {
+      "id": 43,
+      "name": "al",
+      "description": "Application latency",
+      "type": "Double"
+    },
+    {
+      "id": 44,
+      "name": "ra",
+      "description": "Router IP Address",
+      "type": "String"
+    },
+    {
+      "id": 45,
+      "name": "eng",
+      "description": "Engine Type/ID",
+      "type": "String"
+    },
+    {
+      "id": 46,
+      "name": "exid",
+      "description": "Exporter ID",
+      "type": "Integer"
+    },
+    {
+      "id": 47,
+      "name": "tr",
+      "description": "Time the flow was received by the collector",
+      "type": "String"
+    },
+    {
+      "id": 48,
+      "name": "tpkt",
+      "description": "Total packets of the flow. If the flow is not bidirectional this will be the same as ipkt field.",
+      "type": "Integer"
+    },
+    {
+      "id": 49,
+      "name": "tbyt",
+      "description": "Total bytes of the flow. If the flow is not bidirectional this will be the same as ibyt field.",
+      "type": "Double"
+    },
+    {
+      "id": 50,
+      "name": "cp",
+      "description": "Check if destination port, is a port used by common services. Its value is 1 if the port is a common used port, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 51,
+      "name": "prtcp",
+      "description": "Checks if the flow protocol is TCP or not. Value is 1 if it is, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 52,
+      "name": "prudp",
+      "description": "Checks if the flow protocol is UDP or not. Value is 1 if it is, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 53,
+      "name": "pricmp",
+      "description": "Checks if the flow protocol is ICMP or not. Value is 1 if it is, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 54,
+      "name": "prigmp",
+      "description": "Checks if the flow protocol is IGMP or not. Value is 1 if it is, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 55,
+      "name": "prother",
+      "description": "Checks if the flow protocol is not one of TCP, UDP, ICMP or IGMP. Value is 1 if it is not one of them, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 56,
+      "name": "flga",
+      "description": "Checks if TCP flag contains A. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 57,
+      "name": "flgs",
+      "description": "Checks if TCP flag contains S. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 58,
+      "name": "flgf",
+      "description": "Checks if TCP flag contains F. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 59,
+      "name": "flgr",
+      "description": "Checks if TCP flag contains R. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 60,
+      "name": "flgp",
+      "description": "Checks if TCP flag contains P. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    },
+    {
+      "id": 61,
+      "name": "flgu",
+      "description": "Checks if TCP flag contains U. Value is 1 if it contains this, 0 otherwise.",
+      "type": "Integer"
+    }
+  ]
+}

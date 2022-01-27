@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head><title>Python: module nfcapd_api</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+</head>
+<body bgcolor="#f0f0f8">
+
+<table border=0 cellpadding=2 cellspacing=0 summary="heading" width="100%">
+    <tr bgcolor="#7799ee">
+        <td valign=bottom>&nbsp;<br>
+            <font color="#ffffff"
+                  face="helvetica, arial">&nbsp;<br><big><big><strong>nfcapd_api</strong></big></big></font></td
+        >
+        <td align=right valign=bottom
+        ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a
+                href="file:d%3A%5Cideaprojects%5Cpalantir.netflowcollection%5Cpalantirnetflowcsvsourceconnect%5Csrc%5Cmain%5Cpython%5Cnfcapd_api.py">d:\ideaprojects\palantir.netflowcollection\palantirnetflowcsvsourceconnect\src\main\python\nfcapd_api.py</a></font>
+        </td>
+    </tr>
+</table>
+<p><tt>Kafka&nbsp;Source&nbsp;Connector&nbsp;API<br>
+    A&nbsp;API&nbsp;written&nbsp;in&nbsp;Python,&nbsp;using&nbsp;Flask&nbsp;module&nbsp;to&nbsp;create&nbsp;a&nbsp;simple&nbsp;API&nbsp;for&nbsp;some&nbsp;operations.&nbsp;This&nbsp;API&nbsp;is&nbsp;responsible&nbsp;for<br>
+    registering&nbsp;and&nbsp;un-registering&nbsp;the&nbsp;Kafka&nbsp;Connector&nbsp;with&nbsp;the&nbsp;Registry&nbsp;Service.&nbsp;Also,&nbsp;it&nbsp;sends&nbsp;status&nbsp;updates&nbsp;of&nbsp;this<br>
+    connector&nbsp;in&nbsp;Registry&nbsp;Service&nbsp;every&nbsp;a&nbsp;specified&nbsp;time&nbsp;interval.&nbsp;Finally,&nbsp;it&nbsp;has&nbsp;a&nbsp;route&nbsp;for&nbsp;collecting&nbsp;netflow&nbsp;files.<br>
+    When&nbsp;a&nbsp;nfcapd&nbsp;file&nbsp;is&nbsp;received,&nbsp;it&nbsp;is&nbsp;converted&nbsp;in&nbsp;csv&nbsp;and&nbsp;stored&nbsp;in&nbsp;/home/kafka-source-connector/collected_files_csv/<br>
+    directory,&nbsp;for&nbsp;the&nbsp;FileWatcher&nbsp;to&nbsp;notify&nbsp;the&nbsp;Source&nbsp;Task&nbsp;about&nbsp;it.<br>
+    &nbsp;<br>
+    On&nbsp;startup,&nbsp;the&nbsp;API&nbsp;tries&nbsp;to&nbsp;register&nbsp;in&nbsp;Registry&nbsp;Service.&nbsp;If&nbsp;an&nbsp;error&nbsp;occured,&nbsp;it&nbsp;tries&nbsp;again&nbsp;until&nbsp;the&nbsp;registration<br>
+    is&nbsp;completed.&nbsp;When&nbsp;the&nbsp;registration&nbsp;is&nbsp;finished,&nbsp;a&nbsp;separate&nbsp;thread&nbsp;for&nbsp;updating&nbsp;Kafka&nbsp;Connector&nbsp;status&nbsp;is&nbsp;starting.<br>
+    Finally,&nbsp;the&nbsp;Flask&nbsp;server&nbsp;is&nbsp;starting&nbsp;and&nbsp;waiting&nbsp;for&nbsp;connections<br>
+    &nbsp;<br>
+    Execution&nbsp;Params:<br>
+    -&nbsp;Registry&nbsp;Service&nbsp;Params:<br>
+    param&nbsp;--registry_service_ip&nbsp;-rip:&nbsp;IP&nbsp;of&nbsp;services&nbsp;registry.<br>
+    param&nbsp;--registry_service_port&nbsp;-rp:&nbsp;Port&nbsp;of&nbsp;services&nbsp;registry.<br>
+    -&nbsp;Flask&nbsp;Server&nbsp;Params:<br>
+    param&nbsp;--port&nbsp;-p:&nbsp;Port&nbsp;that&nbsp;API&nbsp;for&nbsp;discovery&nbsp;&amp;&nbsp;registry&nbsp;service&nbsp;will&nbsp;listen&nbsp;to,&nbsp;defaults&nbsp;to&nbsp;7000&nbsp;(optional).<br>
+    param&nbsp;--name&nbsp;-n:&nbsp;Name&nbsp;of&nbsp;connector.&nbsp;This&nbsp;name&nbsp;must&nbsp;be&nbsp;unique&nbsp;among&nbsp;all&nbsp;connectors.<br>
+    param&nbsp;--update_seconds&nbsp;-us:&nbsp;Time&nbsp;interval&nbsp;(in&nbsp;seconds)&nbsp;to&nbsp;update&nbsp;status&nbsp;of&nbsp;this&nbsp;connector&nbsp;to&nbsp;Registry&nbsp;Service,&nbsp;defaults&nbsp;to&nbsp;60&nbsp;(optional).</tt>
+</p>
+<p>
+<table border=0 cellpadding=2 cellspacing=0 summary="section" width="100%">
+    <tr bgcolor="#aa55cc">
+        <td colspan=3 valign=bottom>&nbsp;<br>
+            <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td>
+    </tr>
+
+    <tr>
+        <td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+        <td>&nbsp;</td>
+        <td width="100%">
+            <table summary="list" width="100%">
+                <tr>
+                    <td valign=top width="25%"><a href="argparse.html">argparse</a><br>
+                        <a href="json.html">json</a><br>
+                    </td>
+                    <td valign=top width="25%"><a href="logging.html">logging</a><br>
+                        <a href="requests.html">requests</a><br>
+                    </td>
+                    <td valign=top width="25%"><a href="sys.html">sys</a><br>
+                        <a href="threading.html">threading</a><br>
+                    </td>
+                    <td valign=top width="25%"><a href="time.html">time</a><br>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<p>
+<table border=0 cellpadding=2 cellspacing=0 summary="section" width="100%">
+    <tr bgcolor="#eeaa77">
+        <td colspan=3 valign=bottom>&nbsp;<br>
+            <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td>
+    </tr>
+
+    <tr>
+        <td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+        <td>&nbsp;</td>
+        <td width="100%">
+            <dl>
+                <dt><a name="-convertFile"><strong>convertFile</strong></a>()</dt>
+                <dd><tt>(POST)&nbsp;Retrieve&nbsp;netflow&nbsp;file&nbsp;route.<br>
+                    A&nbsp;route&nbsp;used&nbsp;for&nbsp;retrieving&nbsp;sent&nbsp;netflow&nbsp;files,&nbsp;in&nbsp;.nfcapd&nbsp;format.&nbsp;When&nbsp;a&nbsp;file&nbsp;is&nbsp;received&nbsp;it&nbsp;is&nbsp;converted&nbsp;in&nbsp;csv<br>
+                    format&nbsp;using&nbsp;nfdump&nbsp;tool&nbsp;and&nbsp;saved&nbsp;under&nbsp;/home/kafka-source-connector/collected_files_csv/&nbsp;directory.<br>
+                    &nbsp;<br>
+                    Parameters<br>
+                    ----------<br>
+                    param&nbsp;filename:&nbsp;Filename&nbsp;of&nbsp;.nfcapd&nbsp;file&nbsp;to&nbsp;be&nbsp;collected<br>
+                    &nbsp;<br>
+                    Request&nbsp;Body<br>
+                    ------------<br>
+                    File&nbsp;Content&nbsp;(in&nbsp;binary&nbsp;mode)<br>
+                    &nbsp;<br>
+                    Responses&nbsp;(response,&nbsp;status&nbsp;code)<br>
+                    ---------------------------------<br>
+                    {"result":&nbsp;"success"},&nbsp;200<br>
+                    {"result":&nbsp;"error",&nbsp;"message":&nbsp;"A&nbsp;message&nbsp;describing&nbsp;the&nbsp;error&nbsp;occured"},&nbsp;400</tt>
+                </dd>
+            </dl>
+            <dl>
+                <dt><a name="-parseArguments"><strong>parseArguments</strong></a>()</dt>
+            </dl>
+            <dl>
+                <dt><a name="-periodicUpdate"><strong>periodicUpdate</strong></a>(timeIntervalSeconds=60)</dt>
+                <dd><tt>Status&nbsp;Update&nbsp;function<br>
+                    Status&nbsp;update&nbsp;function.&nbsp;It&nbsp;sends&nbsp;a&nbsp;message&nbsp;in&nbsp;Registry&nbsp;Service&nbsp;periodically,&nbsp;with&nbsp;its&nbsp;name&nbsp;and&nbsp;its&nbsp;URL.<br>
+                    It&nbsp;runs&nbsp;in&nbsp;a&nbsp;separate&nbsp;thread,&nbsp;every&nbsp;a&nbsp;specified&nbsp;time&nbsp;interval&nbsp;(Default:&nbsp;60&nbsp;seconds).</tt>
+                </dd>
+            </dl>
+            <dl>
+                <dt><a name="-ping"><strong>ping</strong></a>()</dt>
+                <dd><tt>(GET)&nbsp;Ping&nbsp;route.<br>
+                    A&nbsp;route&nbsp;used&nbsp;for&nbsp;pinging&nbsp;the&nbsp;existing&nbsp;connector.&nbsp;It&nbsp;can&nbsp;be&nbsp;used&nbsp;as&nbsp;health&nbsp;check.&nbsp;If&nbsp;the&nbsp;API&nbsp;responds,&nbsp;the&nbsp;connector<br>
+                    is&nbsp;up&nbsp;and&nbsp;running.&nbsp;If&nbsp;this&nbsp;route&nbsp;doesn't&nbsp;respond,&nbsp;something&nbsp;is&nbsp;wrong&nbsp;with&nbsp;the&nbsp;connector.&nbsp;The&nbsp;management&nbsp;of&nbsp;not<br>
+                    retrieving&nbsp;a&nbsp;response&nbsp;must&nbsp;happen&nbsp;in&nbsp;client&nbsp;side.<br>
+                    &nbsp;<br>
+                    Responses&nbsp;(response,&nbsp;status&nbsp;code)<br>
+                    ---------------------------------<br>
+                    {"result":&nbsp;"success",&nbsp;"ping":&nbsp;"pong"},&nbsp;200</tt></dd>
+            </dl>
+            <dl>
+                <dt><a name="-system"><strong>system</strong></a>(command)</dt>
+                <dd><tt>Execute&nbsp;the&nbsp;command&nbsp;in&nbsp;a&nbsp;subshell.</tt></dd>
+            </dl>
+        </td>
+    </tr>
+</table>
+<p>
+<table border=0 cellpadding=2 cellspacing=0 summary="section" width="100%">
+    <tr bgcolor="#55aa55">
+        <td colspan=3 valign=bottom>&nbsp;<br>
+            <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td>
+    </tr>
+
+    <tr>
+        <td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+        <td>&nbsp;</td>
+        <td width="100%"><strong>app</strong> = &lt;Flask 'Palantir CSV Source Connector'&gt;<br>
+            <strong>formatter</strong> = &lt;logging.Formatter object&gt;<br>
+            <strong>handler</strong> = &lt;StreamHandler &lt;stdout&gt; (INFO)&gt;<br>
+            <strong>logger</strong> = &lt;RootLogger root (INFO)&gt;<br>
+            <strong>request</strong> = &lt;LocalProxy unbound&gt;
+        </td>
+    </tr>
+</table>
+</body>
+</html>

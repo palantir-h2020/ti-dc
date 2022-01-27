@@ -1,0 +1,39 @@
+FROM python:3.7.8-slim
+
+# Install needed packages
+RUN apt-get -y update
+RUN apt-get install -y nfdump
+RUN apt-get install -y inotify-tools
+RUN apt-get install -y procps
+
+# Install required Python packages
+COPY requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
+
+# Create directory in home where nfcapd files and execution scripts will be saved
+WORKDIR /home/orchestrator/netflows
+WORKDIR /home/orchestrator
+
+# Copy required files
+COPY send_nfcapd_file.py /home/orchestrator/
+COPY start_netflow_orchestrator.sh /home/orchestrator/
+
+RUN chmod 777 start_netflow_orchestrator.sh
+RUN chmod +x start_netflow_orchestrator.sh
+
+# Set ENV variables
+# Port, where nfcapd will listens to for incoming netflows
+ENV NFCAPD_PORT=9999
+# How ofter (in secods) nfcapd will dump netflows into a nfcapd file
+ENV NFCAPD_INTERVAL_SECONDS=60
+# IP of registry service
+ENV REGISTRY_IP=localhost
+# Port, where registry service listens to
+ENV REGISTRY_PORT=5000
+# Benchmark mode. Some info about benchmarking will be saved in a file
+ENV BENCHMARK_MODE=false
+
+# Expose required ports
+EXPOSE ${NFCAPD_PORT}
+
+CMD ["./start_netflow_orchestrator.sh"]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ElasticSinkConnect/PalantirCsvElasticSinkConnect.iml" filepath="$PROJECT_DIR$/ElasticSinkConnect/PalantirCsvElasticSinkConnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetflowSourceConnect/PalantirNetflowCsvSourceConnect.iml" filepath="$PROJECT_DIR$/NetflowSourceConnect/PalantirNetflowCsvSourceConnect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ti-dc.iml" filepath="$PROJECT_DIR$/.idea/ti-dc.iml" />
+    </modules>
+  </component>
+</project>

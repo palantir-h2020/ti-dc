@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry-service
+  namespace: ti-sph
+spec:
+  ports:
+    - port: 5000
+      targetPort: 5000
+  selector:
+    app: registry
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: ti-sph
+spec:
+  selector:
+    matchLabels:
+      app: registry
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      containers:
+        - name: registry
+          image: 10.101.10.244:5000/registry-app:v1.0
+          imagePullPolicy: Always
+          # securityContext:
+          #   runAsUser: 1001
+          ports:
+            - containerPort: 5000
+              hostPort: 5000
+              protocol: TCP
+          env:
+            - name: DISCOVERY_PORT
+              value: "5000"
+            - name: PING_INTERVAL
+              value: "60"
+

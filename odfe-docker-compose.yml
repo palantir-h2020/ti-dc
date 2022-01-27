@@ -1,0 +1,33 @@
+version: '3'
+services:
+  elk_0:
+    image: opensearchproject/opensearch:latest
+    container_name: elk_0
+    environment:
+      - discovery.type=single-node
+    ulimits:
+      nofile:
+        soft: 65536 # maximum number of open files for the Elasticsearch user, set to at least 65536 on modern systems
+        hard: 65536
+    ports:
+      - "9200:9200"
+      - "9600:9600" # required for Performance Analyzer
+    networks:
+      - net0
+
+  kib_:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: kib_0
+    ports:
+      - "5601:5601"
+    expose:
+      - "5601"
+    environment:
+      ELASTICSEARCH_URL: https://elk_0:9200
+      ELASTICSEARCH_HOSTS: https://elk_0:9200
+    networks:
+      - net0
+
+networks:
+  net0:
+    external: true

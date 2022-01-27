@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: collector-lb-service
+  namespace: ti-sph
+spec:
+  ports:
+    - port: 9999
+      targetPort: 9999
+  selector:
+    app: collector-lb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collector-lb
+  namespace: ti-sph
+spec:
+  selector:
+    matchLabels:
+      app: collector-lb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: collector-lb
+    spec:
+      containers:
+        - name: collector-lb
+          image: 10.101.10.244:5000/collector-lb-app:v1.0
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: data
+              mountPath: /home/orchestrator/netflows
+          ports:
+            - containerPort: 9999
+              hostPort: 9999
+              protocol: TCP
+          env:
+            - name: NFCAPD_PORT
+              value: "9999"
+            - name: NFCAPD_INTERVAL_SECONDS
+              value: "60"
+            - name: REGISTRY_IP
+              value: registry-service.ti-sph
+            - name: REGISTRY_PORT
+              value: "5000"
+            - name: BENCHMARK_MODE
+              value: "true"
+      volumes:
+        - name: data
+          hostPath:
+            path: /media/palantir-nfs/SPH/volumes/collector-lb
+

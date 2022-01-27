@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: odfe-service
+  namespace: ti-sph
+spec:
+  ports:
+    - port: 9200
+      targetPort: 9200
+  selector:
+    app: odfe
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odfe
+  namespace: ti-sph
+  labels:
+    app: odfe
+spec:
+  replicas:
+  selector:
+    matchLabels:
+      app: odfe
+  template:
+    metadata:
+      labels:
+        app: odfe
+    spec:
+      nodeSelector:
+        alias: worker1
+      containers:
+        - name: odfe
+          image: opensearchproject/opensearch:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/opensearch/data
+          ports:
+            - containerPort: 9200
+              hostPort: 9200
+              protocol: TCP
+          env:
+            - name: discovery.type
+              value: single-node
+      volumes:
+        - name: data
+          hostPath:
+            path: /media/palantir-nfs/SPH/volumes/odfe-data/

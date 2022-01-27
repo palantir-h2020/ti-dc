@@ -1,0 +1,48 @@
+{
+  "timestamp": {
+    "collected": "tr",
+    "start": "ts",
+    "end": "te",
+    "duration": "td"
+  },
+  "netflow": {
+    "ingress": "in",
+    "egress": "out",
+    "dstAs": "das",
+    "srcAs": "sas",
+    "nextHop": "nh",
+    "ipClassService": "stos",
+    "tcpFlags": "flg",
+    "flagA": "flga",
+    "flagS": "flgs",
+    "flagF": "flgf",
+    "flagR": "flgr",
+    "flagP": "flgp",
+    "flagU": "flgu",
+    "packets": "tpkt",
+    "bytes": "tbyt"
+  },
+  "source": {
+    "ip": "sa",
+    "port": "sp",
+    "packets": "ipkt",
+    "bytes": "ibyt",
+    "mask": "smk"
+  },
+  "destination": {
+    "ip": "da",
+    "port": "dp",
+    "commonPort": "cp",
+    "packets": "opkt",
+    "bytes": "obyt",
+    "mask": "dmk"
+  },
+  "network": {
+    "protocol": "pr",
+    "protocolTcp": "prtcp",
+    "protocolUdp": "prudp",
+    "protocolIcmp": "pricmp",
+    "protocolIgmp": "prigmp",
+    "protocolOther": "prother"
+  }
+}
