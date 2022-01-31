@@ -60,6 +60,6 @@ spec:
             - name: PREPROCESSED_ELASTIC_INDEX
               value: netflow-preprocessed-index
             - name: INSERT_RAW
-              value: "false"
+              value: "true"
             - name: BENCHMARK_MODE
               value: "false"

@@ -19,10 +19,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -314,7 +313,7 @@ public class ElasticJsonObject {
         relatedJson.put("ip", relatedJsonArray);
 
         JSONObject netflowExporterJson = new JSONObject();
-        netflowExporterJson.put("timestamp", convertTimestamp(csvMap.get(getJsonSubKey("timestamp", "collected")).toString()));
+        netflowExporterJson.put("timestamp", convertDatetimeToMillis(csvMap.get(getJsonSubKey("timestamp", "start")).toString()));
         netflowExporterJson.put("uptime_millis", ((Long) ManagementFactory.getRuntimeMXBean().getUptime()));
         netflowExporterJson.put("address", hostIp);
         netflowExporterJson.put("engine_type", 1);
@@ -393,10 +392,12 @@ public class ElasticJsonObject {
         JSONObject eventJson = new JSONObject();
         eventJson.put("action", "netflow_flow");
         eventJson.put("type", eventTypeJsonArray);
-        eventJson.put("start", csvMap.get(getJsonSubKey("timestamp", "collected")).toString());
-        eventJson.put("end", csvMap.get(getJsonSubKey("timestamp", "collected")).toString());
+        eventJson.put("created", csvMap.get(getJsonSubKey("timestamp", "start")).toString());
+        eventJson.put("start", csvMap.get(getJsonSubKey("timestamp", "start")).toString());
         eventJson.put("duration", Double.parseDouble(csvMap.get(getJsonSubKey("timestamp", "duration")).toString()));
-        eventJson.put("created", csvMap.get(getJsonSubKey("timestamp", "collected")).toString());
+        eventJson.put("end", convertMillisToDatetime(convertDatetimeToMillis(
+                csvMap.get(getJsonSubKey("timestamp", "end")).toString()) + ((Double) eventJson.getDouble("duration")).longValue())
+        );
         eventJson.put("kind", "event");
         eventJson.put("category", eventCategoryJsonArray);
 
@@ -435,7 +436,6 @@ public class ElasticJsonObject {
         networkJson.put("transport", csvMap.get(getJsonSubKey("network", "protocol")).toString().toLowerCase().trim());
 
         JSONObject elasticJson = new JSONObject();
-        // elasticJson.put("@timestamp", convertTimestamp(csvMap.get(getJsonSubKey("timestamp", "collected")).toString()));
         elasticJson.put("@timestamp", Long.toString(System.currentTimeMillis()));
         elasticJson.put("@metadata", metadataJson);
         elasticJson.put("flow", flowJson);
@@ -475,6 +475,43 @@ public class ElasticJsonObject {
      */
     private String convertTimestamp(String timestamp) {
         return timestamp.replace(" ", "T") + "Z";
+    }
+
+    /**
+     * Converts a given timestamp in format "YYYY-MM-DD hh:mm:ss" to milliseconds.
+     * If ParseException is thrown, 0 (equal to Jan 1, 1970 @ 00:00:00.000) will be returned.
+     *
+     * @param timestamp Timestamp to be converted in format "YYYY-MM-DD hh:mm:ss".
+     * @return Long Milliseconds, that represent the given timestamp.
+     */
+    private long convertDatetimeToMillis(String timestamp) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = sdf.parse(timestamp);
+            long millis = date.getTime();
+
+            return millis;
+        }
+        catch(ParseException e) {
+            logger.error("Datetime " + timestamp + " cannot be converted to ms. Returning 0");
+            logger.error(e.getMessage());
+            logger.error(e.getCause());
+
+            return 0L;
+        }
+    }
+
+    /**
+     * Converts a given timestamp in millis to datetime in format "YYYY-MM-DD hh:mm:ss".
+     *
+     * @param millis Timestamp to be converted in millis.
+     * @return String Converted timestamp in datetime format "YYYY-MM-DD hh:mm:ss".
+     */
+    private String convertMillisToDatetime(long millis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String datetime = sdf.format(new Date(millis));
+
+        return datetime;
     }
 
     /**
