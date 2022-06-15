@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: iframe-opensearch-service
+  namespace: ti-dcp
+spec:
+  ports:
+    - port: 5590
+      targetPort: 5590
+  selector:
+    app: iframe-opensearch
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iframe-opensearch
+  namespace: ti-dcp
+spec:
+  selector:
+    matchLabels:
+      app: iframe-opensearch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: iframe-opensearch
+    spec:
+      nodeSelector:
+        alias: worker1
+      containers:
+        - name: iframe-opensearch
+          image: nginx:1.20.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5590
+              hostPort: 5590
+              protocol: TCP
+          volumeMounts:
+          - mountPath: /etc/nginx/templates
+            name: templates
+      volumes:
+        - name: templates
+          hostPath:
+            path: /media/palantir-nfs/ti-dc/ElasticIFrameApp/templates

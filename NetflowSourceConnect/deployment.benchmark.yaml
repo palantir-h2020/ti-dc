@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: netflow-source-connector-service
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   ports:
     - port: 7000
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: netflow-source-connector
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   selector:
     matchLabels:
@@ -40,11 +40,11 @@ spec:
             - name: KAFKA_PORT
               value: "9092"
             - name: NAME
-              value: netflow-source-connector-service.ti-sph
+              value: netflow-source-connector-service.ti-dcp
             - name: API_PORT
               value: "7000"
             - name: REGISTRY_IP
-              value: registry-service.ti-sph
+              value: registry-service.ti-dcp
             - name: REGISTRY_PORT
               value: "5000"
             - name: UPDATE_INTERVAL

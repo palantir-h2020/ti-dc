@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: odfe-kibana-service
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   ports:
     - port: 5601
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: odfe-kibana
-  namespace: ti-sph
+  namespace: ti-dcp
   labels:
     app: odfe-kibana
 spec:
@@ -37,8 +37,15 @@ spec:
             - containerPort: 5601
               hostPort: 5601
               protocol: TCP
+          volumeMounts:
+          - mountPath: /usr/share/opensearch-dashboards/config
+            name: config
           env:
             - name: OPENSEARCH_URL
               value: https://odfe-service:9200
             - name: OPENSEARCH_HOSTS
               value: https://odfe-service:9200
+      volumes:
+        - name: config
+          hostPath:
+            path: /media/palantir-nfs/ti-dc/ElasticKibanaApp/config

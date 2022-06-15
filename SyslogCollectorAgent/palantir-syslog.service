@@ -1,0 +1,11 @@
+[Unit]
+Description=Palantir Syslog Collection Service
+Documentation=https://www.palantir-project.eu/
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/palantir/syslog-collector
+ExecStart=/opt/palantir/syslog-collector/filebeat -e -c palantir-syslog.yml
+
+[Install]
+WantedBy=multi-user.target

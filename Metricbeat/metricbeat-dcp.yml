@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: metricbeat-dcp
+spec:
+  serviceAccountName: metricbeat
+  restartPolicy: Never
+  containers:
+    - name: metricbeat-dcp
+      image: 10.101.10.244:5000/metricbeat-dcp:7.12.1
+      imagePullPolicy: Always

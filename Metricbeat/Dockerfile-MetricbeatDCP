@@ -1,0 +1,25 @@
+FROM ubuntu:focal-20220404
+
+RUN apt-get update -y
+RUN apt-get install -y curl nano
+
+RUN curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-oss-7.12.1-amd64.deb
+RUN dpkg -i metricbeat-oss-7.12.1-amd64.deb
+RUN rm metricbeat-oss-7.12.1-amd64.deb
+
+COPY files/token-metricbeat /etc/metricbeat/token
+COPY files/ca-metricbeat.crt /etc/metricbeat/service-ca.crt
+
+COPY files/kubeconfig /etc/metricbeat/kubeconfig
+
+COPY files/metricbeat-dcp-config.yml /etc/metricbeat/metricbeat-dcp.yml
+RUN chmod 640 /etc/metricbeat/metricbeat-dcp.yml
+
+COPY files/kubernetes.yml.disabled /etc/metricbeat/modules.d/kubernetes.yml.disabled
+RUN chmod 640 /etc/metricbeat/modules.d/kubernetes.yml.disabled
+
+RUN metricbeat modules enable kubernetes
+RUN metricbeat modules disable system
+# RUN metricbeat setup -c /etc/metricbeat/metricbeat-dcp.yml
+
+CMD [ "metricbeat", "-e", "-c", "/etc/metricbeat/metricbeat-dcp.yml"]

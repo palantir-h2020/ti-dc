@@ -1,0 +1,53 @@
+###################### Filebeat Configuration Example #########################
+
+# ============================== Paths ===============================
+
+path.data: ${path.home}/data-syslog
+path.logs: ${path.home}/logs-syslog
+
+# ============================== Filebeat inputs ===============================
+
+filebeat.inputs:
+
+- type: log
+  enabled: true
+  paths:
+    - '/var/log/syslog'
+
+# ============================== Filebeat modules ==============================
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# ======================= Elasticsearch template setting =======================
+
+setup.template.settings:
+  index.number_of_shards: 1
+
+# =================================== Kibana ===================================
+
+setup.kibana:
+
+# =============================== Logstash Output ==============================
+output.logstash:
+  hosts: ["logstash_hosts_string"]
+
+#output.elasticsearch:
+  #hosts: ["https://10.101.41.42:9200"]
+  #protocol: "https"
+  #username: "admin"
+  #password: "admin"
+  #ssl.verification_mode: none
+
+# ================================= Processors =================================
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~
+#  - convert:
+#    fields:
+#      - {from: "host.hostname", to: "host.hostname", type: "keyword"}
+#    ignore_missing: true
+#    fail_on_error: false

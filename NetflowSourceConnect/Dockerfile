@@ -67,7 +67,7 @@ ENV NAME=source-connector-0
 # Port, where Connector Python API, will listens to
 ENV API_PORT=7000
 # IP of registry service
-ENV REGISTRY_IP=registry-service.ti-sph
+ENV REGISTRY_IP=registry-service.ti-dcp
 # Port, where registry service listens to
 ENV REGISTRY_PORT=5000
 # Time interval (in seconds) that connector will 

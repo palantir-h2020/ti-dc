@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: elastic-cleanup-task-app
+  namespace: ti-dcp
+spec:
+  serviceAccountName: spark
+  restartPolicy: Never
+  containers:
+    - name: elastic-cleanup-task-app
+      image: 10.101.10.244:5000/elastic-cleanup-task-app:v1.0
+      imagePullPolicy: Always

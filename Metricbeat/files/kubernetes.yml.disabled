@@ -1,0 +1,77 @@
+# Module: kubernetes
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/7.x/metricbeat-module-kubernetes.html
+
+# Node metrics, from api-server:
+- module: kubernetes
+  metricsets:
+    - apiserver
+  hosts: ["https://10.101.41.193:6443"]
+  period: 10s
+  add_metadata: true
+  labels.dedot: true
+  annotations.dedot: true
+  bearer_token_file: /etc/metricbeat/token
+  ssl.certificate_authorities:
+    - /etc/metricbeat/service-ca.crt
+  # Enriching parameters:
+  add_metadata: true
+  labels.dedot: true
+  annotations.dedot: true
+
+# Node metrics, from kubelet:
+- module: kubernetes
+  metricsets:
+    - node
+    - system
+    - pod
+    - container
+    - volume
+  period: 10s
+  hosts: ["https://10.101.41.193:10250", "https://10.101.41.42:10250", "https://10.101.41.19:10250"]
+  ssl.verification_mode: none
+  bearer_token_file: /etc/metricbeat/token
+  ssl.certificate_authorities:
+    - /etc/metricbeat/service-ca.crt
+  # Enriching parameters:
+  add_metadata: true
+  labels.dedot: true
+  annotations.dedot: true
+
+# State metrics from kube-state-metrics service:
+- module: kubernetes
+  metricsets:
+    - state_node
+    - state_daemonset
+    - state_deployment
+    - state_replicaset
+    - state_statefulset
+    - state_pod
+    - state_container
+    - state_cronjob
+    - state_resourcequota
+    - state_service
+    - state_persistentvolume
+    - state_persistentvolumeclaim
+    - state_storageclass
+  period: 10s
+  # hosts: ["https://10.101.41.193:8080", "https://10.101.41.42:8080", "https://10.101.41.19:8080"]
+  hosts: ["kube-state-metrics.kube-system:8080"]
+  ssl.verification_mode: none
+  bearer_token_file: /etc/metricbeat/token
+  ssl.certificate_authorities:
+    - /etc/metricbeat/service-ca.crt
+  # Enriching parameters:
+  add_metadata: true
+  kube_config: /etc/metricbeat/kubeconfig
+  # labels.dedot: true
+  # annotations.dedot: true
+
+# Kubernetes events
+- module: kubernetes
+  metricsets:
+    - event
+  period: 10s
+  # Enriching parameters:
+  add_metadata: true
+  labels.dedot: true
+  annotations.dedot: true

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elastic-sink-connector-service
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   ports:
     - port: 5006
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elastic-sink-connector
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   selector:
     matchLabels:
@@ -44,7 +44,7 @@ spec:
             - name: PREPROCESSED_SINK_TOPIC
               value: netflow-anonymized-preprocessed
             - name: ELASTIC_IP
-              value: odfe-service.ti-sph
+              value: odfe-service.ti-dcp
             - name: ELASTIC_PORT
               value: "9200"
             - name: ELASTIC_USER

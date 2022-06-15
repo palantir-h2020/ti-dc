@@ -61,7 +61,7 @@ ENV RAW_SINK_TOPIC=netflow-raw
 # Kafka topic to fetch preprocessed netflow data from and send them to Elastic
 ENV PREPROCESSED_SINK_TOPIC=netflow-anonymized-preprocessed
 # Ip of Elasticsearch
-ENV ELASTIC_IP=odfe-service.ti-sph
+ENV ELASTIC_IP=odfe-service.ti-dcp
 # Port of Elasticsearch
 ENV ELASTIC_PORT=9200
 # Elastic account username

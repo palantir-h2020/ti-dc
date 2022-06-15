@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: odfe-service
-  namespace: ti-sph
+  namespace: ti-dcp
 spec:
   ports:
     - port: 9200
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: odfe
-  namespace: ti-sph
+  namespace: ti-dcp
   labels:
     app: odfe
 spec:

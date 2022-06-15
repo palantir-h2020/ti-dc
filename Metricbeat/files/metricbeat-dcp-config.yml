@@ -1,0 +1,52 @@
+# =========================== Modules configuration ============================
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+metricbeat.modules:
+  module: kubernetes
+  enabled: true
+#   #username: "user"
+#   #password: "secret"
+
+  # Enriching parameters:
+  #add_metadata: true
+  #labels.dedot: true
+  #annotations.dedot: true
+  #kube_config: ~/.kube/config
+
+# ======================= Elasticsearch template setting =======================
+setup.template.settings:
+index.number_of_shards: 1
+#index.codec: best_compression
+#_source.enabled: false
+
+# ================================== General ===================================
+name: metricbeat-dcp
+
+# ================================= Dashboards =================================
+#setup.dashboards.enabled: true
+
+# =================================== Kibana ===================================
+setup.kibana:
+  host: "10.101.41.42:5601"
+
+# ================================= Outputs =================================
+# ---------------------------- Elasticsearch Output ----------------------------
+output.elasticsearch:
+  hosts: ["10.101.41.42:9200"]
+  protocol: "https"
+  username: "admin"
+  password: "admin"
+  ssl.verification_mode: none
+
+# ================================= Processors =================================
+processors:
+  add_host_metadata: ~
+  add_cloud_metadata: ~
+  add_docker_metadata: ~
+  add_kubernetes_metadata: ~
+
+# ================================== Logging ===================================
+logging.level: debug
+logging.selectors: ["*"]

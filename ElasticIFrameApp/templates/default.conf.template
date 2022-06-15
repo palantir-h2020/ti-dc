@@ -1,0 +1,30 @@
+server {
+    listen       5590; #ssl
+    server_name  10.101.41.42;
+
+    #ssl_certificate_key /etc/nginx/nginx-selfsigned.key;
+    #ssl_certificate /etc/nginx/nginx-selfsigned.crt;
+
+    location / {
+        proxy_set_header  Host $host;
+        proxy_set_header  X-Real-IP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        #add_header Cross-Origin-Resource-Policy cross-origin;
+        #add_header Access-Control-Allow-Origin *;
+        #add_header Content-Security-Policy "default-src *; connect-src *; font-src *; frame-src *; img-src * data:; media-src *; object-src *; script-src * 'unsafe-eval' 'unsafe-inline'; style-src * 'unsafe-inline'; script-src-elem * 'unsafe-inline'; frame-src * 'unsafe-inline'";
+        #add_header Referrer-Policy "unsafe-url";
+        #proxy_cookie_path / "/; secure; HttpOnly; SameSite=none";
+        #proxy_cookie_path /app/wazuh "/; secure; HttpOnly; SameSite=none";
+        #proxy_cookie_flags security_authentication nohttponly samesite=none;
+        #proxy_cookie_flags ~ secure samesite=none;
+		proxy_pass  http://10.101.41.42:5601;
+		proxy_hide_header X-Frame-Options;
+        proxy_set_header  Authorization "Basic YWRtaW46YWRtaW4=";
+		# Disable caching
+		proxy_hide_header Cache-Control;
+		add_header Cache-Control "no-store";
+        #proxy_cookie_flags appName secure samesite=none;
+        #proxy_cookie_flags /app/wazuh/ /;
+		#proxy_cookie_path /* "/; secure; HttpOnly; SameSite=none";
+    }
+}
