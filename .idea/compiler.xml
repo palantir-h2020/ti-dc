@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="PalantirCsvElasticSinkConnect" target="8" />
+      <module name="PalantirCsvElasticSinkConnect" target="1.8" />
       <module name="PalantirNetflowCsvSourceConnect" target="8" />
     </bytecodeTargetLevel>
   </component>

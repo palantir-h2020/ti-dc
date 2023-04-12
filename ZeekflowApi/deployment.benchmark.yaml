@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: zeekflow-service
+  namespace: ti-dcp
+spec:
+  ports:
+    - port: 7100
+      targetPort: 7100
+  selector:
+    app: zeekflow
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zeekflow
+  namespace: ti-dcp
+spec:
+  selector:
+    matchLabels:
+      app: zeekflow
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: zeekflow
+    spec:
+      nodeSelector:
+        alias: worker2
+      containers:
+        - name: zeekflow
+          image: 10.101.10.244:5000/zeekflow-api:v1.0
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: logs
+              mountPath: /home/zeekflow-integration/logs
+          ports:
+            - containerPort: 7100
+              hostPort: 7100
+              protocol: TCP
+          env:
+            - name: API_PORT
+              value: "7100"
+            - name: ZEEK_LOGS
+              value: "/home/zeekflow-integration/logs/"
+            - name: ZEEK_LOGFILE_NAME
+              value: "conn.log"
+            - name: KAFKA_BOOTSTRAP_SERVER
+              value: "10.101.41.255:9092"
+            - name: KAFKA_TOPIC
+              value: "sc.generated_log.zeek"
+            - name: BENCHMARK_MODE
+              value: "True"
+      hostAliases:
+      - ip: "10.101.41.255"
+        hostnames:
+        - "kafka"
+      volumes:
+        - name: logs
+          hostPath:
+            path: /media/palantir-nfs/SPH/volumes/zeekflow-api

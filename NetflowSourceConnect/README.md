@@ -45,6 +45,7 @@ netflow-source-windows.properties):
   property. For example: If main directory, which NetflowLoadBalancer observes is /home/palantir-netflows/ and
   collector.id=5, the ***filewatcher.dir.observe=/home/palantir-netflows/5/***
 - **filewatcher.interval.s**: Time interval (in seconds) for FileWatcher service to check for new files.
+- **tenant.id**: ID of tenant, for multi-tenancy support.
 
 ## Dockerized Deployment
 
@@ -88,8 +89,12 @@ Any needed configuration for the connector is configured with Docker ENV variabl
 
 - **KAFKA_IP**: Kafka Bootstrap server
 - **KAFKA_PORT**: Kafka port
+- **KAFKA_TOPIC**: Kafka topic, to send collected data
+- **TENANT_ID**: ID of the tenant, for multi-tenancy support
+- **COLLECTOR_ID**: ID of the collector. This must be unique, among collectors in same tenant.
 - **NAME**: Name of the connector. This must be unique among all connectors
 - **API_PORT**: Port, where Connector Python API, will listens to
 - **REGISTRY_IP**: IP of registry service
 - **REGISTRY_PORT**: Port, where registry service listens to
 - **UPDATE_INTERVAL**: Time interval (in seconds) that connector will update its status in registry Service
+- **BENCHMARK_MODE**: Enable/Disable benchmark mode. In benchmark some timestamps are stored in files, in order to measure end-to-end delay

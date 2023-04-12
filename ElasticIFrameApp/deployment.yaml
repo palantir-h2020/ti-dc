@@ -39,7 +39,12 @@ spec:
           volumeMounts:
           - mountPath: /etc/nginx/templates
             name: templates
+          - mountPath: /etc/nginx/certs
+            name: certs
       volumes:
         - name: templates
           hostPath:
             path: /media/palantir-nfs/ti-dc/ElasticIFrameApp/templates
+        - name: certs
+          hostPath:
+            path: /media/palantir-nfs/ti-dc/ElasticIFrameApp/ssl

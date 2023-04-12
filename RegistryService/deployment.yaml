@@ -30,8 +30,6 @@ spec:
         - name: registry
           image: 10.101.10.244:5000/registry-app:v1.0
           imagePullPolicy: Always
-          # securityContext:
-          #   runAsUser: 1001
           ports:
             - containerPort: 5000
               hostPort: 5000

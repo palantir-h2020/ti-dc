@@ -39,6 +39,12 @@ spec:
               value: "10.101.41.255"
             - name: KAFKA_PORT
               value: "9092"
+            - name: KAFKA_TOPIC
+              value: "netflow-raw"
+            - name: TENANT_ID
+              value: "100"
+            - name: COLLECTOR_ID
+              value: "0"
             - name: NAME
               value: netflow-source-connector-service.ti-dcp
             - name: API_PORT
@@ -49,5 +55,15 @@ spec:
               value: "5000"
             - name: UPDATE_INTERVAL
               value: "60"
+            - name: FILEWATCHER_DIRECTORY
+              value: "/home/kafka-source-connector/collected_files_zeek/"
+            - name: FILEWATCHER_INTERVAL_SECONDS
+              value: "5"
+            - name: ZEEK_INTEGRATION
+              value: "true"
+            - name: ZEEK_IP
+              value: "zeekflow-service.ti-dcp.svc"
+            - name: ZEEK_PORT
+              value: "7100"
             - name: BENCHMARK_MODE
               value: "false"

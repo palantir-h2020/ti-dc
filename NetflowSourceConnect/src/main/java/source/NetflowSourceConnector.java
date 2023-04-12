@@ -55,6 +55,12 @@ public class NetflowSourceConnector extends SourceConnector {
      */
     public static final String BENCHMARK_MODE = "benchmark_mode";
 
+    /**
+     * Tenant Id, for supporting multiple tenants. This must be unique among tenants.
+     * If not provided, -1 will be used by default
+     */
+    public static final String TENANT_ID = "tenant.id";
+
     // Collector properties
     /**
      * Collector params group.
@@ -77,7 +83,15 @@ public class NetflowSourceConnector extends SourceConnector {
      */
     private static final String KAFKA_PARAM_GROUP = "Kafka Properties";
 
+    /**
+     * Other params.
+     */
     private static final String OTHER_PARAM_GROUP = "Other Properties";
+    
+    /**
+     * Tenant params.
+     */
+    private static final String TENANT_PARAM_GROUP = "Tenant Properties";
 
     // kafka properties
     /**
@@ -100,7 +114,10 @@ public class NetflowSourceConnector extends SourceConnector {
                     "Kafka topics for streaming results (comma separated)", KAFKA_PARAM_GROUP,
                     0, ConfigDef.Width.SHORT, "Kafka topic for streaming results (required).")
             .define(BENCHMARK_MODE, ConfigDef.Type.STRING, "false", ConfigDef.Importance.HIGH,
-                    "Run Kafka Source Connector in benchmark mode (Default: false)", OTHER_PARAM_GROUP, 0, ConfigDef.Width.SHORT, "Run Kafka Source Connector in benchmark mode (optional).");
+                    "Run Kafka Source Connector in benchmark mode (Default: false)", OTHER_PARAM_GROUP, 
+                    0, ConfigDef.Width.SHORT, "Run Kafka Source Connector in benchmark mode (optional).")
+            .define(TENANT_ID, ConfigDef.Type.INT, -1,ConfigDef.Importance.HIGH, "Tenant Id", TENANT_PARAM_GROUP, 
+                    0, ConfigDef.Width.SHORT, "Tenant Id (required)");
     /**
      * Map, that will store configuration from configDef object, after validation.
      */

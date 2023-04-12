@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic-sink-connector-service
+  namespace: ti-dcp
+spec:
+  ports:
+    - port: 5006
+      targetPort: 5006
+  selector:
+    app: elastic-sink-connector
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-sink-connector
+  namespace: ti-dcp
+spec:
+  selector:
+    matchLabels:
+      app: elastic-sink-connector
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: elastic-sink-connector
+    spec:
+      nodeSelector:
+        alias: worker2
+      containers:
+        - name: elastic-sink-connector
+          image: 10.101.10.244:5000/elastic-sink-connector:v1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5006
+              hostPort: 5006
+              protocol: TCP
+          env:
+            - name: KAFKA_IP
+              value: "10.101.41.255"
+            - name: KAFKA_PORT
+              value: "9092"
+            - name: RAW_SINK_TOPIC
+              value: syslog-raw
+            - name: PREPROCESSED_SINK_TOPIC
+              value: syslog-anonymized-preprocessed
+            - name: ELASTIC_IP
+              value: odfe-service.ti-dcp
+            - name: ELASTIC_PORT
+              value: "9200"
+            - name: ELASTIC_USER
+              value: admin
+            - name: ELASTIC_PASS
+              value: admin
+            - name: ELASTIC_INDEX_SHARDS
+              value: "1"
+            - name: ELASTIC_INDEX_PARTITIONS
+              value: "1"
+            - name: RAW_ELASTIC_INDEX
+              value: syslog-raw-index
+            - name: PREPROCESSED_ELASTIC_INDEX
+              value: syslog-preprocessed-index
+            - name: INSERT_RAW
+              value: "false"
+            - name: BENCHMARK_MODE
+              value: "true"

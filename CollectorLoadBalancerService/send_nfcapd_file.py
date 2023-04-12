@@ -76,13 +76,16 @@ while targetSearch:
                         else:
                             logger.error('Available connector cannot receive the sent file (result = error).')
                             logger.error(r_content['message'])
-                            time.sleep(10)
+                            logger.error('File ' + str(args.filename) + ' will be ignored!')
+                            targetSearch = False
                     else:
                         logger.error('Available connector cannot receive the sent file (result not in json keys).')
-                        time.sleep(10)
+                        logger.error('File ' + str(args.filename) + ' will be ignored!')    
+                        targetSearch = False
                 else:
                     logger.error('Available connector cannot receive the sent file. Status code : ' + str(response.status_code) + '.')
-                    time.sleep(10)
+                    logger.error('File ' + str(args.filename) + ' will be ignored!')
+                    targetSearch = False
             else:
                 logger.error('Not available connector found.  Searching again in 10 seconds.')
                 time.sleep(10)

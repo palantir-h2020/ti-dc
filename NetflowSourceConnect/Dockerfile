@@ -50,8 +50,8 @@ WORKDIR /opt/kafka/connectors/
 
 # Copy built jar & config files in kafka connectors dir
 RUN cp /home/kafka-source-connector/jar/PalantirNetflowCsvSourceConnect-0.1-SNAPSHOT-jar-with-dependencies.jar ./
-RUN cp /home/kafka-source-connector/src/main/resources/palantir-connect-standalone.properties ./
-RUN cp /home/kafka-source-connector/src/main/resources/netflow-source-linux.properties ./
+RUN cp /home/kafka-source-connector/src/main/resources/palantir-connect-standalone.properties.default ./palantir-connect-standalone.properties
+RUN cp /home/kafka-source-connector/src/main/resources/netflow-source-linux.properties.default ./netflow-source-linux.properties
 RUN cp /home/kafka-source-connector/src/main/resources/log4j.properties ./
 
 # Change workdir to home
@@ -62,6 +62,12 @@ WORKDIR /home/kafka-source-connector/
 ENV KAFKA_IP=10.101.41.255
 # Kafka port
 ENV KAFKA_PORT=9092
+# Kafka Topic, to write data
+ENV KAFKA_TOPIC=netflow-raw
+# ID of tenant, for multi-tenancy support
+ENV TENANT_ID=1000
+# ID of the collector
+ENV COLLECTOR_ID=0
 # Name of the connector. This must be unique among all connectors
 ENV NAME=source-connector-0
 # Port, where Connector Python API, will listens to
@@ -73,6 +79,18 @@ ENV REGISTRY_PORT=5000
 # Time interval (in seconds) that connector will 
 # update its status in registry Service
 ENV UPDATE_INTERVAL=60
+# Directory, where connector will observe for new collected files.
+# If Zeek integration is enabled, the appropriate directory
+# must be set in this ENV variable.
+ENV FILEWATCHER_DIRECTORY=/home/kafka-source-connector/collected_files_csv/
+# Interval for filewatcher to check for new collected files
+ENV FILEWATCHER_INTERVAL_SECONDS=5
+# Enable integration with Zeek
+ENV ZEEK_INTEGRATION=false
+# Zeek integration API IP (used only if ZEEK_INTEGRATION=true)
+ENV ZEEK_IP=localhost
+# Zeek integration API port (used only if ZEEK_INTEGRATION=true)
+ENV ZEEK_PORT=80
 # Option for benchmarking
 ENV BENCHMARK_MODE=true
 

@@ -1,0 +1,34 @@
+{
+  "timestamp": {
+    "collected": "tr",
+    "start": "ts",
+    "end": "te",
+    "duration": "td"
+  },
+  "syslog": {
+    "ingress": "in",
+    "egress": "out",
+    "dstAs": "das",
+    "srcAs": "sas",
+    "nextHop": "nh",
+    "ipClassService": "stos",
+    "tcpFlags": "flg"
+  },
+  "source": {
+    "ip": "sa",
+    "port": "sp",
+    "packets": "ipkt",
+    "bytes": "ibyt",
+    "mask": "smk"
+  },
+  "destination": {
+    "ip": "da",
+    "port": "dp",
+    "packets": "opkt",
+    "bytes": "obyt",
+    "mask": "dmk"
+  },
+  "network": {
+    "protocol": "pr"
+  }
+}

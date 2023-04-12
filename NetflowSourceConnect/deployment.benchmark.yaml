@@ -49,5 +49,15 @@ spec:
               value: "5000"
             - name: UPDATE_INTERVAL
               value: "60"
+            - name: FILEWATCHER_DIRECTORY
+              value: "/home/kafka-source-connector/collected_files_csv/"
+            - name: FILEWATCHER_INTERVAL_SECONDS
+              value: "5"
+            - name: ZEEK_INTEGRATION
+              value: "false"
+            - name: ZEEK_IP
+              value: "zeekflow-service.ti-dcp.svc"
+            - name: ZEEK_PORT
+              value: "80"
             - name: BENCHMARK_MODE
               value: "true"

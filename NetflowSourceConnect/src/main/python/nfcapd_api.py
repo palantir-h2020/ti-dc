@@ -17,6 +17,10 @@ param --registry_service_port -rp: Port of services registry.
 param --port -p: Port that API for discovery & registry service will listen to, defaults to 7000 (optional).
 param --name -n: Name of connector. This name must be unique among all connectors.
 param --update_seconds -us: Time interval (in seconds) to update status of this connector to Registry Service, defaults to 60 (optional).
+param --zeek_enabled -z: Enable integration with Zeek, through an API (optional).
+= Zeek Integration Params:
+param --zeek_ip -zip: IP of the Zeek integration API. It will be used only if -z is set to True, defaults to localhost (optional).
+param --zeek_port -zp: Port of the Zeek integration API. It will be used only if -z is set to True, defaults to port (optional).
 """
 
 import sys
@@ -26,6 +30,7 @@ import logging
 import argparse
 import requests
 import threading
+import base64
 
 from os import system
 from flask import Flask, request
@@ -60,6 +65,15 @@ def parseArguments():
         help='Name of connector. This name must be unique among all connectors.')
     apiArgsGroup.add_argument('-us', '--update_seconds', type=int, required=False, default=60, 
         help='Time interval (in seconds) to update status of this connector to Registry Service. Default: 60')
+
+    # Arguments for Zeek integration
+    zeekIntegrationArgsGroup = parser.add_argument_group('Zeek Integration Params')
+    zeekIntegrationArgsGroup.add_argument('-z', '--zeek_enabled', type=bool, required=False, default=False,
+                              help='Integration with Zeek tool, through an API. Default: False')
+    zeekIntegrationArgsGroup.add_argument('-zip', '--zeek_ip', type=str, required=False, default='localhost',
+                              help='IP of the Zeek integration API. Only used when -z is set to True. Default: localhost')
+    zeekIntegrationArgsGroup.add_argument('-zp', '--zeek_port', type=int, required=False, default=80,
+                              help='Port of the Zeek integration API. Only used when -z is set to True. Default: 80')
 
     args = parser.parse_args()
 
@@ -121,20 +135,78 @@ def convertFile():
     
     try:
         nfcapd_filename = '/home/kafka-source-connector/collected_files/' + str(request.args['filename'])
-        csv_filename = '/home/kafka-source-connector/collected_files_csv/' + str(request.args['filename'])
+        csv_filename = '/home/kafka-source-connector/collected_files_csv/' + str(request.args['filename'])  + '.csv'
+        zeek_filename = '/home/kafka-source-connector/collected_files_zeek/' + str(request.args['filename'])  + '.csv'
 
         f = open(nfcapd_filename, 'wb')
         f.write(request.data)
         f.close()
 
-        system('nfdump -o csv -r ' + nfcapd_filename + ' -q > ' + str(csv_filename) + '.csv')
+        system('nfdump -B -o csv -r ' + nfcapd_filename + ' -q > ' + str(csv_filename))
 
-        statusCode = 200
-        response['result'] = 'success'
+        if args.zeek_enabled:
+            # Send to Zeek API (.csv file) and wait for response. If response success, store it to zeek folder
+            # Set request headers
+            headers = {}
+            headers['Content-Type'] = 'application/json'
+
+            # Set request params
+            params = {}
+            params['filename'] = request.args['filename']
+
+            # Load csv file (binary)
+            csv_file = open(csv_filename, 'rb').read()
+
+            # Send the POST request to Zeek integration API.
+            zeek_response = requests.post(url='http://' + str(args.zeek_ip) + ':' + str(args.zeek_port) + '/zeekflow', headers=headers, params=params, data=csv_file)
+
+            if zeek_response.status_code == 200:
+                r_content = zeek_response.json()
+                if r_content['result']:
+                    if r_content['result'] == 'success':
+                        if r_content['zeek']:
+
+                            # Decode base64 of zeek flow netflow file and append it to a .csv file in zeek folder.
+                            f = open(zeek_filename, 'wb')
+                            f.write(base64.b64decode(r_content['zeek']))
+                            f.close()
+
+                            statusCode = 200
+                            response['result'] = 'success'
+                        else:
+                            logger.error('Zeek integration API returned success but no Zeek base64 is included in response.')
+
+                            statusCode = 400
+                            response['result'] = 'error'
+                            response['message'] = 'Zeek integration API returned success but no Zeek base64 is included in response.'
+                    else:
+                        logger.error('Zeek integration API cannot receive the sent file (result = error).')
+                        logger.error(r_content['message'])
+
+                        statusCode = 400
+                        response['result'] = 'error'
+                        response['message'] = 'Zeek integration API cannot receive the sent file. Error: ' + r_content['message']
+                else:
+                    logger.error('An error occured trying to calculate Zeek score in integration pod.')
+
+                    statusCode = 400
+                    response['result'] = 'error'
+                    response['message'] = 'An error occured trying to calculate Zeek score in integration pod.'
+            else:
+                logger.error('An error trying to send .csv file in Zeek integration pod. Status code : ' + str(zeek_response.status_code) + '.')
+
+                statusCode = 400
+                response['result'] = 'error'
+                response['message'] = 'An error trying to send .csv file in Zeek integration pod. Status code : ' + str(zeek_response.status_code) + '.'
+        else:
+            statusCode = 200
+            response['result'] = 'success'
     except Exception as e:
+        logger.exception(e)
+
         statusCode = 400
         response['result'] = 'error'
-        response['message'] = e
+        response['message'] = str(e)
 
     return response, statusCode
 
@@ -171,9 +243,15 @@ if __name__ == "__main__":
     serviceInfo = {}
     serviceInfo['name'] = str(args.name)
     serviceInfo['url'] = 'http://' + str(args.name) + ':' + str(args.port)
+    
+    zeekInfo = {}
+    zeekInfo['enabled'] = args.zeek_enabled
+    zeekInfo['ip'] = args.zeek_ip
+    zeekInfo['port'] = args.zeek_port
 
     logger.info(registryServiceUrl)
     logger.info(serviceInfo)
+    logger.info(zeekInfo)
 
     while True:
         # Send a register command to Registry service

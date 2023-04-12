@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sda-dcp-converter
+  namespace: ti-dcp
+spec:
+  selector:
+    matchLabels:
+      app: sda-dcp-converter
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sda-dcp-converter
+    spec:
+      containers:
+        - name: sda-dcp-converter
+          image: 10.101.10.244:5000/sda-dcp-converter:v1.0
+          imagePullPolicy: Always
+          env:
+            - name: KAFKA_BOOTSTRAP_SERVER
+              value: "10.101.41.255:9092"
+            - name: SDA_TOPIC
+              value: "sda-netflow-raw"
+            - name: DCP_TOPIC
+              value: "netflow-raw"
+            - name: TENANT_ID
+              value: "0"

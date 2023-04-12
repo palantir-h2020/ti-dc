@@ -57,10 +57,11 @@ public class NetflowUtils {
                 // Ignore "No matched flows" & empty lines
                 if(!(line.trim().equals("")) && !(line.trim().equals("No matched flows")))  {
                     // Create a new Source Record.
+                    // Add 8 new fields in data collected from nfcapd. Integration with SDA platform
                     netflowRecords.add(createSourceRecord(
                             KAFKA_TOPIC,
                             keyPrefix + counter,
-                            line
+                            line + ",0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
                     ));
 
                     if (benchmark_mode.equals("true")) {

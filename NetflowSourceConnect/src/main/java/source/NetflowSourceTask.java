@@ -107,6 +107,10 @@ public class NetflowSourceTask extends SourceTask implements FilesListener {
                 TimeUnit.SECONDS
         );
 
+        for(Map.Entry<String, String> entry : props.entrySet()) {
+            logger.info(entry.getKey() + ":" + entry.getValue());
+        }
+
         // Copy all props
         config.putAll(props);
     }
@@ -146,7 +150,7 @@ public class NetflowSourceTask extends SourceTask implements FilesListener {
             ArrayList<SourceRecord> csvRecords = NetflowUtils.loadNetflowCsv(
                     config.get("filewatcher.dir.observe") + "/" + filename,
                     KAFKA_TOPIC,
-                    config.get("collector.id") + "_" + filename.replaceAll("\\.", "_") + "_",
+                    config.get("tenant.id") + "_" + config.get("collector.id") + "_" + filename.replaceAll("\\.", "_") + "_",
                     BENCHMARK_MODE);
             logger.debug("Received " + csvRecords.size() + " records from NetflowUtils");
             if (csvRecords.size() > 0) {
